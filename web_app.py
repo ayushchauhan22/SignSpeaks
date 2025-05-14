@@ -15,11 +15,13 @@ import os
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, 
+    template_folder='IP-2 SignSpeeks',
+    static_folder='IP-2 SignSpeeks')
 
 # Load the model and scaler
 try:
-    model_path = 'IP-2 SignSpeeks/model.p'
+    model_path = os.environ.get('MODEL_PATH', 'IP-2 SignSpeeks/model.p')
     logger.info(f"Attempting to load model from: {model_path}")
     model_dict = pickle.load(open(model_path, 'rb'))
     model = model_dict['model']
@@ -55,7 +57,7 @@ SIGN_REPEAT_DELAY = 0.7  # Reduced from 0.5 to 0.3 seconds for faster repeat rec
 
 @app.route('/')
 def index():
-    return render_template('sign_language.html')
+    return render_template('index.html')
 
 @app.route('/camera')
 def camera():
@@ -63,7 +65,7 @@ def camera():
 
 @app.route('/static/<path:filename>')
 def serve_static(filename):
-    return send_from_directory('IP-2 SignSpeeks/static', filename)
+    return send_from_directory('IP-2 SignSpeeks', filename)
 
 def extract_features(hand_landmarks):
     try:
@@ -263,4 +265,9 @@ def clear_sentence():
     return jsonify({'status': 'success', 'sentence': ''})
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000) 
+    port = int(os.environ.get('PORT', 5000))
+    app.run(
+        host='0.0.0.0',
+        port=port,
+        debug=(os.environ.get('FLASK_ENV', 'production') == 'development')
+    ) 
