@@ -1,5 +1,5 @@
-{
-  "deploy": {
-    "startCommand": "gunicorn web_app:app"
+  {
+    "deploy": {
+      "startCommand": "gunicorn 'IP-2 SignSpeeks.web_app:app'"
+    }
   }
-} 
