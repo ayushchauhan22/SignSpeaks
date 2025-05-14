@@ -3,12 +3,11 @@ services:
     name: signspeaks
     env: python
     buildCommand: |
-      python -m pip install --upgrade pip setuptools wheel
-      python -m pip install numpy==1.21.6
-      python -m pip install -r requirements.txt
+      pip install --upgrade pip
+      pip install --prefer-binary -r requirements.txt
     startCommand: gunicorn web_app:app
     envVars:
       - key: PYTHON_VERSION
-        value: "3.9.0"
+        value: "3.11"
       - key: PORT
         value: 10000 
