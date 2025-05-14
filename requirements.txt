@@ -1,7 +1,6 @@
 setuptools>=42
 wheel>=0.37.0
-Cython>=0.29.24
-numpy==1.26.4
+numpy==1.25.2
 flask==2.0.1
 opencv-python-headless==4.5.3.56
 mediapipe==0.8.9.1
