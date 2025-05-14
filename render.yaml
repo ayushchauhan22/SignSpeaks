@@ -4,11 +4,11 @@ services:
     env: python
     buildCommand: |
       python -m pip install --upgrade pip setuptools wheel
-      python -m pip install numpy==1.24.3
+      python -m pip install numpy==1.21.6
       python -m pip install -r requirements.txt
     startCommand: gunicorn web_app:app
     envVars:
       - key: PYTHON_VERSION
-        value: "3.10.8"
+        value: "3.9.0"
       - key: PORT
         value: 10000 
