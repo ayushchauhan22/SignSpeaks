@@ -3,12 +3,8 @@ services:
     name: signspeaks
     env: python
     buildCommand: |
-      apt-get update && apt-get install -y build-essential
-      rm -rf .venv
-      python -m venv .venv
-      source .venv/bin/activate
       pip install --upgrade pip setuptools wheel
-      pip install --only-binary=:all: numpy
+      pip install numpy==1.26.4 --prefer-binary
       pip install -r requirements.txt
     startCommand: gunicorn web_app:app
     envVars:
