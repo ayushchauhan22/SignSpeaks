@@ -26,11 +26,14 @@ RUN mkdir -p /app/static /app/templates
 # Copy the application files
 COPY . .
 
-# Move files to correct locations (using quotes to handle spaces in directory name)
-RUN cd "IP-2 SignSpeeks" && \
-    cp -r *.html *.jpg *.jpeg *.png *.ico /app/templates/ && \
-    cp -r *.jpg *.jpeg *.png *.ico /app/static/ && \
+# Move files to correct locations
+RUN mkdir -p /app/temp && \
+    cp -r "IP-2 SignSpeeks" /app/temp/ && \
+    cd /app/temp/"IP-2 SignSpeeks" && \
+    find . -type f -name "*.html" -exec cp {} /app/templates/ \; && \
+    find . -type f \( -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" -o -name "*.ico" \) -exec cp {} /app/static/ \; && \
     cp model.p /app/static/ && \
+    rm -rf /app/temp && \
     chmod -R 755 /app/static /app/templates
 
 # Set environment variables
