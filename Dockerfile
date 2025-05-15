@@ -20,23 +20,26 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the application files
-COPY . .
-
 # Create necessary directories
 RUN mkdir -p /app/static /app/templates
 
-# Move static files to the correct location
+# Copy the application files
+COPY . .
+
+# Move files to correct locations
 RUN cp -r "IP-2 SignSpeeks"/* /app/static/ && \
-    cp -r "IP-2 SignSpeeks"/* /app/templates/
+    cp -r "IP-2 SignSpeeks"/* /app/templates/ && \
+    cp "IP-2 SignSpeeks/model.p" /app/static/ && \
+    chmod -R 755 /app/static /app/templates
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PORT=8000
 ENV MODEL_PATH=/app/static/model.p
+ENV FLASK_ENV=production
 
 # Expose the port
 EXPOSE 8000
 
-# Run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "--timeout", "120", "web_app:app"] 
+# Run the application with more workers and longer timeout
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "--timeout", "120", "--access-logfile", "-", "--error-logfile", "-", "web_app:app"] 

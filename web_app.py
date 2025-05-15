@@ -15,12 +15,20 @@ import os
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = Flask(__name__)
+# Create Flask app with explicit static and template folders
+app = Flask(__name__, 
+    static_folder='static',
+    template_folder='templates')
 
 # Load the model and scaler
 try:
     model_path = os.environ.get('MODEL_PATH', 'static/model.p')
     logger.info(f"Attempting to load model from: {model_path}")
+    
+    if not os.path.exists(model_path):
+        logger.error(f"Model file not found at: {model_path}")
+        raise FileNotFoundError(f"Model file not found at: {model_path}")
+        
     model_dict = pickle.load(open(model_path, 'rb'))
     model = model_dict['model']
     scaler = model_dict['scaler']
@@ -46,24 +54,39 @@ hands = mp_hands.Hands(
 sentence = []
 stable_prediction_count = 0
 last_prediction = None
-STABILITY_THRESHOLD = 6  # Reduced from 5 to 3 for faster recognition
+STABILITY_THRESHOLD = 6
 last_added_sign = None
 sign_cooldown = 0
-SIGN_COOLDOWN_THRESHOLD = 2  # Reduced from 3 to 2 for easier double letters
+SIGN_COOLDOWN_THRESHOLD = 2
 last_sign_time = 0
-SIGN_REPEAT_DELAY = 0.7  # Reduced from 0.5 to 0.3 seconds for faster repeat recognition
+SIGN_REPEAT_DELAY = 0.7
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    try:
+        return render_template('index.html')
+    except Exception as e:
+        logger.error(f"Error rendering index: {str(e)}")
+        logger.error(traceback.format_exc())
+        return "Error loading page", 500
 
 @app.route('/camera')
 def camera():
-    return render_template('sign_language.html')
+    try:
+        return render_template('sign_language.html')
+    except Exception as e:
+        logger.error(f"Error rendering camera page: {str(e)}")
+        logger.error(traceback.format_exc())
+        return "Error loading camera page", 500
 
 @app.route('/static/<path:filename>')
 def serve_static(filename):
-    return send_from_directory('IP-2 SignSpeeks', filename)
+    try:
+        return send_from_directory(app.static_folder, filename)
+    except Exception as e:
+        logger.error(f"Error serving static file {filename}: {str(e)}")
+        logger.error(traceback.format_exc())
+        return "File not found", 404
 
 def extract_features(hand_landmarks):
     try:
