@@ -2,4 +2,4 @@
   "deploy": {
     "startCommand": "gunicorn web_app:app"
   }
-} 
+}
