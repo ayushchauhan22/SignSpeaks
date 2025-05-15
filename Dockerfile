@@ -26,10 +26,11 @@ RUN mkdir -p /app/static /app/templates
 # Copy the application files
 COPY . .
 
-# Move files to correct locations
-RUN cp -r "IP-2 SignSpeeks"/* /app/static/ && \
-    cp -r "IP-2 SignSpeeks"/* /app/templates/ && \
-    cp "IP-2 SignSpeeks/model.p" /app/static/ && \
+# Move files to correct locations (using quotes to handle spaces in directory name)
+RUN cd "IP-2 SignSpeeks" && \
+    cp -r *.html *.jpg *.jpeg *.png *.ico /app/templates/ && \
+    cp -r *.jpg *.jpeg *.png *.ico /app/static/ && \
+    cp model.p /app/static/ && \
     chmod -R 755 /app/static /app/templates
 
 # Set environment variables
