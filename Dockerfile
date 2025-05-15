@@ -35,7 +35,7 @@ RUN cp -a "IP-2 SignSpeeks/." /app/ && \
     find /app -maxdepth 1 -name "*.jpeg" -exec mv {} /app/static/ \; && \
     find /app -maxdepth 1 -name "*.png" -exec mv {} /app/static/ \; && \
     find /app -maxdepth 1 -name "*.ico" -exec mv {} /app/static/ \; && \
-    if [ -f /app/model.p ]; then mv /app/model.p /app/static/; fi && \
+    find /app -maxdepth 2 -name "model.p" -exec mv {} /app/static/ \; && \
     chmod -R 755 /app/static /app/templates
 
 # Set environment variables
