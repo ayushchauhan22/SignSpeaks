@@ -20,15 +20,23 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application
+# Copy the application files
 COPY . .
+
+# Create necessary directories
+RUN mkdir -p /app/static /app/templates
+
+# Move static files to the correct location
+RUN cp -r "IP-2 SignSpeeks"/* /app/static/ && \
+    cp -r "IP-2 SignSpeeks"/* /app/templates/
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PORT=8000
+ENV MODEL_PATH=/app/static/model.p
 
 # Expose the port
 EXPOSE 8000
 
 # Run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"] 
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "--timeout", "120", "web_app:app"] 

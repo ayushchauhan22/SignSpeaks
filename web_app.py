@@ -15,13 +15,11 @@ import os
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = Flask(__name__, 
-    template_folder='IP-2 SignSpeeks',
-    static_folder='IP-2 SignSpeeks')
+app = Flask(__name__)
 
 # Load the model and scaler
 try:
-    model_path = os.environ.get('MODEL_PATH', 'IP-2 SignSpeeks/model.p')
+    model_path = os.environ.get('MODEL_PATH', 'static/model.p')
     logger.info(f"Attempting to load model from: {model_path}")
     model_dict = pickle.load(open(model_path, 'rb'))
     model = model_dict['model']
