@@ -40,8 +40,9 @@ RUN cp -a "IP-2 SignSpeeks/." /app/ && \
 ENV PYTHONUNBUFFERED=1
 ENV FLASK_ENV=production
 
-# Expose the port provided by Railway
-EXPOSE ${PORT}
+# Expose the port provided by Railway, default to 5000 if not set
+ARG PORT=5000
+EXPOSE $PORT
 
 # Run the application with more workers and longer timeout, using the PORT env variable
-CMD exec gunicorn --bind 0.0.0.0:${PORT} --workers 4 --timeout 120 --access-logfile - --error-logfile - web_app:app 
+CMD exec gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 4 --timeout 120 --access-logfile - --error-logfile - web_app:app 
