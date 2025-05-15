@@ -26,13 +26,13 @@ RUN mkdir -p /app/static /app/templates
 # Copy the application files
 COPY . .
 
-# Move files to correct locations
+# Move files to correct locations (robust to missing file types)
 RUN cp -r "IP-2 SignSpeeks"/* /app/ && \
-    mv /app/*.html /app/templates/ && \
-    mv /app/*.jpg /app/static/ 2>/dev/null || true && \
-    mv /app/*.jpeg /app/static/ 2>/dev/null || true && \
-    mv /app/*.png /app/static/ 2>/dev/null || true && \
-    mv /app/*.ico /app/static/ 2>/dev/null || true && \
+    find /app -maxdepth 1 -name "*.html" -exec mv {} /app/templates/ \; && \
+    find /app -maxdepth 1 -name "*.jpg" -exec mv {} /app/static/ \; && \
+    find /app -maxdepth 1 -name "*.jpeg" -exec mv {} /app/static/ \; && \
+    find /app -maxdepth 1 -name "*.png" -exec mv {} /app/static/ \; && \
+    find /app -maxdepth 1 -name "*.ico" -exec mv {} /app/static/ \; && \
     mv /app/model.p /app/static/ && \
     chmod -R 755 /app/static /app/templates
 
