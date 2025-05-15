@@ -27,23 +27,21 @@ RUN mkdir -p /app/static /app/templates
 COPY . .
 
 # Move files to correct locations
-RUN mkdir -p /app/temp && \
-    cp -r "IP-2 SignSpeeks" /app/temp/ && \
-    cd /app/temp/"IP-2 SignSpeeks" && \
-    find . -type f -name "*.html" -exec cp {} /app/templates/ \; && \
-    find . -type f \( -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" -o -name "*.ico" \) -exec cp {} /app/static/ \; && \
-    cp model.p /app/static/ && \
-    rm -rf /app/temp && \
+RUN cp -r "IP-2 SignSpeeks"/* /app/ && \
+    mv /app/*.html /app/templates/ && \
+    mv /app/*.jpg /app/static/ 2>/dev/null || true && \
+    mv /app/*.jpeg /app/static/ 2>/dev/null || true && \
+    mv /app/*.png /app/static/ 2>/dev/null || true && \
+    mv /app/*.ico /app/static/ 2>/dev/null || true && \
+    mv /app/model.p /app/static/ && \
     chmod -R 755 /app/static /app/templates
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
-ENV PORT=8000
-ENV MODEL_PATH=/app/static/model.p
 ENV FLASK_ENV=production
 
-# Expose the port
-EXPOSE 8000
+# Expose the port provided by Railway
+EXPOSE ${PORT}
 
-# Run the application with more workers and longer timeout
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "--timeout", "120", "--access-logfile", "-", "--error-logfile", "-", "web_app:app"] 
+# Run the application with more workers and longer timeout, using the PORT env variable
+CMD exec gunicorn --bind 0.0.0.0:${PORT} --workers 4 --timeout 120 --access-logfile - --error-logfile - web_app:app 
