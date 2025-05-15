@@ -26,14 +26,14 @@ RUN mkdir -p /app/static /app/templates
 # Copy the application files
 COPY . .
 
-# Move files to correct locations (robust to missing file types)
-RUN cp -r "IP-2 SignSpeeks"/* /app/ && \
+# Move files to correct locations (robust to missing file types and subdirs)
+RUN cp -a "IP-2 SignSpeeks/." /app/ && \
     find /app -maxdepth 1 -name "*.html" -exec mv {} /app/templates/ \; && \
     find /app -maxdepth 1 -name "*.jpg" -exec mv {} /app/static/ \; && \
     find /app -maxdepth 1 -name "*.jpeg" -exec mv {} /app/static/ \; && \
     find /app -maxdepth 1 -name "*.png" -exec mv {} /app/static/ \; && \
     find /app -maxdepth 1 -name "*.ico" -exec mv {} /app/static/ \; && \
-    mv /app/model.p /app/static/ && \
+    if [ -f /app/model.p ]; then mv /app/model.p /app/static/; fi && \
     chmod -R 755 /app/static /app/templates
 
 # Set environment variables
