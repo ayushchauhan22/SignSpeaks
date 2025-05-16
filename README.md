@@ -1,6 +1,6 @@
 # SignSpeaks - Empowering Communication Through ML
 
-SignSpeaks is a web application that translates sign language gestures into text in real-time using computer vision and machine learning.
+SignSpeaks is a web application that translates american sign language gestures into text in real-time using computer vision and machine learning.
 
 ## Features
 - Real-time sign language translation
