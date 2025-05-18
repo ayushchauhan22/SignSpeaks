@@ -29,7 +29,7 @@ cd SignSpeaks
 
 2. Install the required dependencies:
 ```bash
-pip install -r requirements.txt
+pip install -r libraries.txt
 ```
 
 3. Run the application:
