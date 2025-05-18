@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SignSpeaks</title>
+  <link rel="shortcut icon" href="/assets/image.png" type="image/x-icon">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      text-decoration: none;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(to right, #a8c0ff, #3f2b96);
+      color: white;
+      text-align: center;
+      background-image: url('/assets/background5.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      padding-top: 90px;
+    }
+
+    header {
+      width: 100%;
+      height: 110px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      z-index: 999;
+    }
+
+    .navbar {
+      max-width: 1450px;
+      margin: 0 auto;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .title {
+      font-size: 36px;
+      font-family: 'Pacifico', cursive;
+      color: #fff;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+      transition: color 0.5s ease;
+    }
+
+    .title:hover {
+      color: #000;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 35px;
+    }
+
+    .nav-links a {
+      position: relative;
+      font-size: 16px;
+      font-weight: 500;
+      color: #fff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: #fff;
+      transition: width 0.3s ease-in-out;
+    }
+
+    .nav-links a:hover {
+      color: #000000;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .hero {
+      max-width: 600px;
+      margin-top: 200px;
+      font-size: 20px;
+      display: inline-block;
+    }
+
+    .get-started {
+      background: white;
+      color: black;
+      padding: 13px 23px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .get-started:hover {
+      background-color: rgb(216, 214, 214);
+    }
+
+    .get-started:active {
+      transform: scale(0.90);
+      transition: transform 0.1s ease;
+    }
+
+    .features {
+      margin-top: 150px;
+    }
+
+    /* ASL Info Section */
+    .asl-info {
+      max-width: 800px;
+      margin: 150px auto 40px;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      color: #fff;
+      line-height: 1.6;
+      font-size: 18px;
+      text-align: left;
+    }
+
+    .asl-info h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #ffffff;
+      text-align: center;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    .main-section {
+      background: linear-gradient(to right, #9cb4c6, #6b738a);
+      padding: 80px 20px;
+      margin-top: -205px;
+    }
+
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      gap: 10px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .card-container-2 {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 30px auto;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      width: 350px;
+      color: #fff;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+
+    .card p {
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .learning-heading {
+      padding: 60px 20px 30px;
+      text-align: center;
+    }
+
+    .learning-heading h2 {
+      color: #fff;
+      font-size: 32px;
+      font-weight: bold;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
+      margin-top: 100px;
+    }
+
+    .learning-headingg h2 {
+      color: #fff;
+      font-size: 32px;
+      font-weight: bold;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
+      margin-top: 60px;
+    }
+
+    .start-learning-container {
+      margin-top: 50px;
+      text-align: center;
+      margin-bottom: -20px;
+    }
+
+    .start-learning-btn {
+      background: #ffffff;
+      color: #000000;
+      padding: 14px 30px;
+      font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      /* font-weight: bold; */
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .start-learning-btn:hover {
+      background-color: #e0e0e0;
+    }
+
+    .start-learning-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* slider */
+    .scroll-slider {
+      overflow: hidden;
+      position: relative;
+      width: 90%;
+      max-width: 1145px;
+      margin: 65px auto;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .slider-track {
+      display: flex;
+      width: calc(250px * 8);
+      /* 8 images each 250px wide */
+      animation: scroll-left 30s linear infinite;
+    }
+
+    .slider-track img {
+      width: 250px;
+      height: auto;
+      margin-right: 20px;
+      border-radius: 10px;
+    }
+
+    /* Animation */
+    @keyframes scroll-left {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* our goals */
+
+    .testimonials-section {
+      /* background: rgba(255, 255, 255, 0.15); */
+      background: none;
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+      padding: 40px 20px;
+      text-align: center;
+      clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+      margin: 0px;
+    }
+
+    .testimonials-section h1 {
+      color: #fff;
+      font-size: 32px;
+      font-weight: bold;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
+      margin-bottom: 30px;
+    }
+
+    .gallery {
+      column-count: 3;
+      column-gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .gallery img {
+      width: 100%;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      display: block;
+      break-inside: avoid;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.1);
+    }
+
+    /* mission */
+
+    .mission-section {
+      background-color: #5a6c8f;
+      color: white;
+      padding: 60px 20px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 50px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      border-radius: 10px 10px 0px 0px;
+    }
+
+    .mission-text {
+      max-width: 500px;
+    }
+
+    .mission-text h2 {
+      text-decoration: underline;
+      margin-bottom: 20px;
+    }
+
+    .mission-text p {
+      line-height: 1.6;
+    }
+
+    .mission-image img {
+      width: 500px;
+      border-radius: 10px;
+    }
+
+    .instructors-section {
+      background: linear-gradient(to right top, #ffe3e3 50%, white 50%);
+      text-align: center;
+      padding: 60px 20px;
+      margin-bottom: 50px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      border-radius: 0px 0px 10px 10px;
+    }
+
+    .instructors-section h2 {
+      font-size: 28px;
+      margin-bottom: 40px;
+      color: #2e2e2e;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
+    }
+
+    .instructors {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .instructor img {
+      width: 180px;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .instructor.round img {
+      border-radius: 50%;
+    }
+
+    /* Hero Section */
+    .hero2 {
+      /* background: url('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d') no-repeat center center/cover; */
+      background: url('/assets/footer_image.jpg') no-repeat center center/cover;
+      color: white;
+      padding: 100px 40px 60px;
+      position: relative;
+      margin-left: -20px;
+      margin-right: -20px;
+    }
+
+    .hero2 h1 {
+      font-size: 40px;
+      max-width: 600px;
+      font-weight: bold;
+    }
+
+    .hero2 p {
+      font-size: 18px;
+      margin-top: 10px;
+      margin-bottom: 30px;
+      margin-right: 845px;
+    }
+
+    .hero2 .enroll-btn {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      background-color: #ffe3e3;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Footer Section */
+    .footer {
+      background-color: #3a1e1e;
+      color: white;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      padding: 40px 20px;
+      margin-left: -20px;
+      margin-right: -20px;
+    }
+
+    .footer-column {
+      max-width: 300px;
+    }
+
+    .footer-column h3 {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .footer-column p {
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .footer-column ul {
+      list-style: none;
+      padding: 0;
+      font-size: 15px;
+    }
+
+    .footer-column li {
+      margin: 5px 0;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .social-icons a {
+      color: white;
+      text-decoration: none;
+      font-size: 20px;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      color: #ccc;
+      background-color: #2a1414;
+      margin-bottom: -80px;
+      margin-left: -20px;
+      margin-right: -20px;
+    }
+
+    .navbar-logo {
+      height: 90px;
+      width: auto;
+      vertical-align: middle;
+      display: inline-block;
+      margin-top: -7px;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+    }
+  </style>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <header>
+    <div class="navbar">
+      <a href="/" class="logo-link">
+        <img src="/assets/Removal-432.png" alt="SignSpeaks Logo" class="navbar-logo">
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/sign-language">Camera</a></li>
+          <li><a href="/learning-area">Learning Area</a></li>
+          <li><a href="/help">Help</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="content-wrapper">
+      <section class="hero">
+        <h2>Bridge Communication with Sign Language to Text</h2><br>
+        <p>Unlock the power of communication.</p>
+        <a href="/sign-language"><button class="get-started">Get Started</button></a>
+      </section>
+
+      <section class="features">
+        <h2>Our Features</h2><br>
+        <p>Real-time Sign Language Translation and Learning</p>
+      </section>
+
+      <section class="asl-info">
+        <h2>What is American Sign Language (ASL)?</h2>
+        <p>
+          American Sign Language (ASL) is a complete, natural language that serves as the primary means of
+          communication for many deaf and hard-of-hearing individuals in North America. It has its own
+          grammar, syntax, and cultural nuances, making it a rich and expressive language. ASL is not a visual
+          representation of English—it is a unique language with its own rules and structure.
+        </p>
+        <p>
+          Learning ASL fosters inclusion and breaks down communication barriers, enabling stronger connections
+          and accessibility for all. Whether you're looking to communicate with a loved one or simply expand
+          your communication skills, ASL opens doors to meaningful interaction.
+        </p>
+      </section>
+    </div>
+
+
+    <div class="main-section">
+      <section class="learning-heading">
+        <h2>Now You Can Learn Sign Language with Fun & Quiz!</h2>
+      </section>
+      <div class="card-container">
+        <div class="card">
+          <img src="/assets/alphabet.jpg" alt="Card Image 1">
+          <h3>Alphabet in ASL</h3>
+          <p>Practice sign language with real-time feedback and engaging tutorials.</p>
+        </div>
+        <div class="card">
+          <img src="/assets/common-words.jpeg" alt="Card Image 2">
+          <h3>Common-Words</h3>
+          <p>Translate signs to text instantly using your device's camera.</p>
+        </div>
+        <div class="card">
+          <img src="/assets/greetings.jpeg" alt="Card Image 3">
+          <h3>How to Greet</h3>
+          <p>Join a community of learners and ASL experts for guidance and support.</p>
+        </div>
+      </div>
+
+      <div class="start-learning-container">
+        <a href="/learning-area"><button class="start-learning-btn">Start Learning</button></a>
+      </div>
+
+      <div class="scroll-slider">
+        <div class="slider-track">
+          <img src="/assets/scroll_image1.jpg" alt="Slide 1">
+          <img src="/assets/scroll_image2.jpg" alt="Slide 2">
+          <img src="/assets/scroll_image3.jpg" alt="Slide 3">
+          <img src="/assets/scroll_image4.jpg" alt="Slide 4">
+          <!-- Repeat the same images for smooth loop -->
+          <img src="/assets/scroll_image1.jpg" alt="Slide 1">
+          <img src="/assets/scroll_image2.jpg" alt="Slide 2">
+          <img src="/assets/scroll_image3.jpg" alt="Slide 3">
+          <img src="/assets/scroll_image4.jpg" alt="Slide 4">
+        </div>
+      </div>
+
+
+      <section class="learning-headingg">
+        <h2>Our Features!!</h2>
+      </section>
+      <div class="card-container-2">
+        <div class="card">
+          <img src="/assets/translator.jpg" alt="Real-Time Translation">
+          <h3>Real-Time Translation</h3>
+          <p>Instantly convert sign language gestures into readable text using your device's camera.</p>
+        </div>
+
+        <div class="card">
+          <img src="/assets/learn.png" alt="Learn ASL">
+          <h3>Learn ASL</h3>
+          <p>Explore an interactive learning area to master the basics and advanced levels of American Sign Language.
+          </p>
+        </div>
+
+        <div class="card">
+          <img src="/assets/voice_over.jpeg" alt="Voice Output">
+          <h3>Voice Output</h3>
+          <p>Enable voice synthesis for converted text, making communication even more seamless and inclusive.</p>
+        </div>
+
+      </div>
+
+      <section class="testimonials-section">
+        <h1>Our Goals</h1>
+        <div class="gallery">
+          <img src="/assets/ourGoals_image1.jpg" alt="Testimonial 1">
+          <img src="/assets/ourGoals_image2.png" alt="Testimonial 2">
+          <img src="/assets/ourGoals_image4.png" alt="Testimonial 3">
+          <img src="/assets/scroll_image5.jpg" alt="Testimonial 4">
+          <img src="/assets/scroll_image7.jpg" alt="Testimonial 5">
+          <img src="/assets/scroll_image6.jpg" alt="Testimonial 6">
+          <img src="/assets/ourGoals_image3.jpg" alt="Testimonial 7">
+        </div>
+      </section>
+
+      <!-- Mission Section -->
+      <section class="mission-section">
+        <div class="mission-text">
+          <h2>Our Mission</h2>
+          <p>
+            Our journey began with a passion for bridging communication gaps, where we quickly established ourselves as
+            a leader in sign language education. As we refined our teaching methods, our community expanded, driven by
+            positive testimonials and the transformative impact of our courses.
+          </p>
+          <p>
+            With each new course, we strive to enhance our offerings, incorporating the latest teaching methods and
+            resources to ensure our students receive the best education possible. Our commitment to excellence drives us
+            to empower individuals through sign language.
+          </p>
+        </div>
+        <div class="mission-image">
+          <img src="/assets/ourMission_image3.jpg" alt="Mission Image">
+        </div>
+      </section>
+
+      <!-- Instructors Section -->
+      <section class="instructors-section">
+        <h2>Meet Our Members</h2>
+        <div class="instructors">
+          <div class="instructor">
+            <img src="/assets/gupta.jpg" alt="Instructor 1">
+          </div>
+          <div class="instructor">
+            <img src="/assets/vasu.jpg" alt="Instructor 2">
+          </div>
+          <div class="instructor">
+            <img src="/assets/ansh.jpg" alt="Instructor 3">
+          </div>
+          <div class="instructor">
+            <img src="/assets/bravjot.jpg" alt="Instructor 3">
+          </div>
+        </div>
+      </section>
+
+      <!-- Hero Section -->
+      <section class="hero2">
+        <a href="/learning-area"><button class="enroll-btn">Start Learning</button></a>
+        <h1>Experience the Joy of Sign Language Learning</h1>
+        <p>Join us and make a difference in your community!</p>
+      </section>
+
+      <!-- Footer Section -->
+      <footer>
+        <div class="footer">
+          <div class="footer-column">
+            <h3>Designed for companies</h3>
+            <p>
+              We are a team of passionate people whose goal is to improve everyone's life through disruptive products.
+              We build great products to solve your business problems. Our products are designed for small to medium
+              size companies willing to optimize their performance.
+            </p>
+          </div>
+          <div class="footer-column">
+            <h3>SignSpeaks</h3>
+            <ul>
+              <li>Chitkara University</li>
+              <li>H.P. Baddi</li>
+              <li>India</li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <ul>
+              <li><i class="fas fa-phone"></i> +91 999-999-9090</li>
+              <li><i class="fas fa-envelope"></i> hello@signspeaks.com</li>
+            </ul>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-github"></i></a>
+              <a href="#"><i class="fab fa-x-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          Copyright © SignSpeaks
+        </div>
+      </footer>
+
+    </div>
+
+  </main>
+
+  <!-- slider -->
+
+
+
+
+</body>
+
+</html>

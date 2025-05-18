@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Language Recognition</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2WqkSWqQqBIaDG6fSVeZG0bFPhcqgEJEraw&s');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            padding-top: 80px;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+        .video-container {
+            flex: 1;
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            min-width: 300px;
+        }
+        .extra-features {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .extra-features h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            text-align: center;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 8px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .feature-item img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 12px;
+            transition: transform 0.3s ease;
+        }
+        .feature-item:hover img {
+            transform: scale(1.05);
+        }
+        .feature-item p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+        }
+        .info-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-width: 300px;
+        }
+        .card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #videoElement {
+            width: 100%;
+            max-height: 500px;
+            border-radius: 8px;
+            background-color: #000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .sentence-container {
+            position: relative;
+            display: inline-block;
+        }
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 32px;
+            background-color: #007bff;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        #sentence {
+            font-size: 28px;
+            min-height: 60px;
+            padding: 20px;
+            text-align: left;
+            font-family: monospace;
+            white-space: pre;
+            display: flex;
+            align-items: center;
+        }
+        .space-indicator {
+            display: inline-block;
+            width: 1ch;
+            height: 2px;
+            background-color: #666;
+            margin: 0 2px;
+            vertical-align: middle;
+        }
+        .current-sign {
+            font-size: 24px;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .current-sign.can-repeat {
+            background-color: #e3f2fd;
+            border: 2px solid #2196f3;
+        }
+        .current-sign.repeating {
+            animation: pulse 0.5s ease-in-out;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .prediction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.3s;
+        }
+        .prediction-item:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+        .prediction-item:last-child {
+            border-bottom: none;
+        }
+        .confidence-bar {
+            height: 20px;
+            width: 150px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-left: 15px;
+        }
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            transition: width 0.3s ease;
+        }
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #0066ff, #0040b3);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            text-align: center;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 8px;
+        }
+        .sign-probability {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 200px;
+        }
+        .sign-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            min-width: 30px;
+        }
+        .probability-value {
+            color: #666;
+            font-size: 16px;
+            min-width: 70px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 10px;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            height: 102px;
+        }
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-family: 'Pacifico', cursive;  
+            font-size: 2em;
+            color: white;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .navbar-logo {
+            height: 90px;
+            width: auto;
+            vertical-align: middle;
+            display: inline-block;
+            margin-top: -7px;
+            margin-left: -44%;
+        }
+        .logo-link {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="/" class="logo-link">
+                <img src="/assets/Removal-726.png" alt="SignSpeaks Logo" class="navbar-logo">
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/sign-language">Camera</a></li>
+                <li><a href="/learning-area">Learning Area</a></li>
+                <li><a href="/help">Help</a></li>
+                <li><a href="/about">About</a></li>
+              </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="video-container">
+            <video id="videoElement" style="transform: scaleX(-1);" autoplay playsinline></video>
+            <div class="controls">
+                <button id="cameraButton" onclick="toggleCamera()">Start Camera</button>
+                <button onclick="clearSentence()">Clear Sentence</button>
+            </div>
+            <div class="extra-features">
+                <h3>Special Gestures</h3>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <img src="/assets/del1.jpg" alt="Delete Gesture">
+                        <p>Delete Gesture</p>
+                    </div>
+                    <div class="feature-item">
+                        <img src="/assets/space1.jpg" alt="Space Gesture">
+                        <p>Space Gesture</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="info-container">
+            <div class="card">
+                <h2>Current Sign</h2>
+                <div class="current-sign" id="currentSign"></div>
+            </div>
+            <div class="card">
+                <h2>Top Predictions</h2>
+                <div id="predictions">
+
+                </div>
+            </div>
+            <div class="card">
+                <h2>Sentence</h2>
+                <div class="sentence-container">
+                    <div id="sentence"></div>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+
+    <script>
+        let video = document.getElementById('videoElement');
+        let sentenceElement = document.getElementById('sentence');
+        let currentSignElement = document.getElementById('currentSign');
+        let predictionsElement = document.getElementById('predictions');
+        let cameraButton = document.getElementById('cameraButton');
+        let isCameraOn = false;
+        let stream = null;
+        let lastAddedSign = null;
+
+        async function startCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: "user"
+                    }
+                });
+                video.srcObject = stream;
+                
+                // Wait for video to be ready
+                await new Promise((resolve) => {
+                    video.onloadedmetadata = () => {
+                        video.play();
+                        resolve();
+                    };
+                });
+                
+                isCameraOn = true;
+                cameraButton.textContent = 'Stop Camera';
+                processFrame();
+            } catch (err) {
+                console.error("Error accessing camera:", err);
+                alert("Error accessing camera. Please make sure you have granted camera permissions.");
+            }
+        }
+
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+                isCameraOn = false;
+                cameraButton.textContent = 'Start Camera';
+            }
+        }
+
+        function toggleCamera() {
+            if (isCameraOn) {
+                stopCamera();
+            } else {
+                startCamera();
+            }
+        }
+
+        function clearSentence() {
+            fetch('/sign-language/clear_sentence', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    sentenceElement.textContent = '';
+                });
+        }
+
+        function updatePredictions(predictions) {
+            predictionsElement.innerHTML = '';
+            predictions.forEach(pred => {
+                let item = document.createElement('div');
+                item.className = 'prediction-item';
+
+                let signContainer = document.createElement('div');
+                signContainer.className = 'sign-probability';
+
+                let sign = document.createElement('span');
+                sign.className = 'sign-name';
+                sign.textContent = pred.sign;
+
+                let probability = document.createElement('span');
+                probability.className = 'probability-value';
+                probability.textContent = `${(pred.probability * 100).toFixed(1)}%`;
+
+                let confidence = document.createElement('div');
+                confidence.className = 'confidence-bar';
+                let fill = document.createElement('div');
+                fill.className = 'confidence-fill';
+                fill.style.width = `${pred.probability * 100}%`;
+                confidence.appendChild(fill);
+
+                signContainer.appendChild(sign);
+                signContainer.appendChild(probability);
+                item.appendChild(signContainer);
+                item.appendChild(confidence);
+                predictionsElement.appendChild(item);
+            });
+        }
+
+        async function processFrame() {
+            if (!isCameraOn || !video.videoWidth || !video.videoHeight) {
+                console.log('Camera not ready or dimensions invalid');
+                setTimeout(processFrame, 100); // Try again in 100ms
+                return;
+            }
+
+            try {
+                const canvas = document.createElement('canvas');
+                // Ensure we have valid dimensions
+                const width = video.videoWidth || 640;
+                const height = video.videoHeight || 480;
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    console.error('Could not get canvas context');
+                    return;
+                }
+                
+                // Draw the frame
+                ctx.scale(-1, 1);
+                ctx.translate(-width, 0);
+                ctx.drawImage(video, 0, 0, width, height);
+                
+                // Get the frame data with quality setting
+                const frame = canvas.toDataURL('image/jpeg', 0.8);
+                
+                if (!frame || frame.length < 100) {
+                    console.error('Invalid frame data');
+                    return;
+                }
+
+                const response = await fetch('/sign-language/process_frame', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ frame: frame })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Server error:', errorData);
+                    throw new Error(errorData.error || 'Server error occurred');
+                }
+
+                const data = await response.json();
+
+                // Update current sign with visual feedback
+                let currentSign = data.current_sign;
+                currentSignElement.textContent = currentSign || 'No sign detected';
+                
+                // Add visual feedback for repeatable signs
+                if (data.can_repeat && currentSign === lastAddedSign) {
+                    currentSignElement.classList.add('can-repeat');
+                } else {
+                    currentSignElement.classList.remove('can-repeat');
+                }
+
+                // Add visual feedback for delete and space
+                if (data.is_delete) {
+                    currentSignElement.classList.add('delete-active');
+                    currentSignElement.classList.remove('space-active');
+                } else if (data.has_space) {
+                    currentSignElement.classList.add('space-active');
+                    currentSignElement.classList.remove('delete-active');
+                } else {
+                    currentSignElement.classList.remove('delete-active', 'space-active');
+                }
+
+                // Update sentence with visual spaces
+                let sentenceText = data.sentence || '';
+                let formattedSentence = '';
+                for (let i = 0; i < sentenceText.length; i++) {
+                    if (sentenceText[i] === ' ') {
+                        formattedSentence += '␣';
+                    } else {
+                        formattedSentence += sentenceText[i];
+                    }
+                }
+                sentenceElement.textContent = formattedSentence;
+                
+                // Store the last added sign
+                if (currentSign && currentSign !== 'delete' && currentSign !== 'space') {
+                    lastAddedSign = currentSign;
+                }
+
+                // Update predictions
+                if (data.top_predictions) {
+                    updatePredictions(data.top_predictions);
+                }
+
+                // Process next frame
+                requestAnimationFrame(processFrame);
+            } catch (error) {
+                console.error('Error processing frame:', error);
+                currentSignElement.textContent = 'Error processing frame';
+                currentSignElement.classList.add('error');
+                // Try again after a short delay
+                setTimeout(processFrame, 1000);
+            }
+        }
+
+        // Start with camera off
+        cameraButton.textContent = 'Start Camera';
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Learning Area - SignSpeaks</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="shortcut icon" href="/assets/image.png" type="image/x-icon">
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <style>
+    html {
+      background-image: url('/assets/background5.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      text-decoration: none;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      padding-top: 90px;
+      color: white;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+
+    header {
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      z-index: 999;
+    }
+
+    .navbar {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .title {
+      font-size: 36px;
+      font-family: 'Pacifico', cursive;
+      color: #fff;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+      transition: color 0.5s ease;
+    }
+
+    .title:hover {
+      color: #000;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 35px;
+    }
+
+    .nav-links a {
+      position: relative;
+      font-size: 16px;
+      font-weight: 500;
+      color: #fff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: #fff;
+      transition: width 0.3s ease-in-out;
+    }
+
+    .nav-links a:hover {
+      color: #000000;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Quiz Blocks */
+    .quiz-section {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 40px;
+      margin-top: 60px;
+      padding: 40px;
+      flex-wrap: wrap;
+    }
+
+    .quiz-box {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #ffffff30;
+      border-radius: 20px;
+      padding: 30px;
+      width: 350px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .quiz-box:hover {
+      transform: scale(1.03);
+    }
+
+    .quiz-box h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .quiz-box button {
+      padding: 12px 30px;
+      font-size: 16px;
+      background-color: #ffffff;
+      color: #333;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    .quiz-box button:hover {
+      background-color: #dddddd;
+    }
+
+    .chart-container {
+      margin-top: 10px;
+    }
+
+    canvas {
+      margin-top: 15px;
+      max-width: 100%;
+    }
+
+    /* Learning Experience Section */
+    .experience-section {
+      margin: 60px auto;
+      max-width: 800px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+    }
+
+    .experience-section h2 {
+      font-size: 28px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    .experience-section p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #f1f1f1;
+    }
+
+    /* Chart Section */
+    .chart-section {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 60px;
+      padding: 40px;
+    }
+
+    .chart-box {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #ffffff30;
+      border-radius: 20px;
+      padding: 30px;
+      width: 400px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .navbar-logo {
+      height: 90px;
+      width: auto;
+      vertical-align: middle;
+      display: inline-block;
+      margin-top: -7px;
+      margin-left: -44%;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="navbar">
+      <a href="/" class="logo-link">
+        <img src="/assets/Removal-432.png" alt="SignSpeaks Logo" class="navbar-logo">
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/sign-language">Camera</a></li>
+          <li><a href="/learning-area">Learning Area</a></li>
+          <li><a href="/help">Help</a></li>
+          <li><a href="/about">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Two Quiz Blocks -->
+  <div class="quiz-section">
+    <!-- First Quiz Block -->
+    <div class="quiz-box">
+      <h2>Start Quiz</h2>
+      <button onclick="window.location.href='/quiz'">Start</button>
+    </div>
+
+    <!-- Second Quiz Block -->
+    <div class="quiz-box">
+      <h2>Start Camera Quiz</h2>
+      <button onclick="window.location.href='/camera-quiz'">Start</button>
+    </div>
+  </div>
+
+  <!-- Learning Experience Section -->
+  <div class="experience-section">
+    <h2>Experience the Joy of Sign Language Learning</h2>
+    <p>
+      Dive into an immersive journey where communication knows no barriers. Whether you're preparing for your first sign or brushing up your skills, SignSpeak makes learning fun, interactive, and meaningful.
+    </p>
+    <p>
+      Unlock a new way to express, connect, and understand the world around you. Let's build an inclusive future, one sign at a time. 🌟
+    </p>
+  </div>
+
+  <!-- Chart Section -->
+  <div class="chart-section">
+    <!-- Bar Chart for Quiz -->
+    <div class="chart-box">
+      <h2>Quiz Results</h2>
+      <div class="chart-container">
+        <canvas id="barChart1"></canvas>
+      </div>
+    </div>
+
+    <!-- Pie Chart for Camera Quiz -->
+    <div class="chart-box">
+      <h2>Camera Quiz Results</h2>
+      <div class="chart-container">
+        <canvas id="pieChart1"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart Initialization -->
+  <script>
+    function createCharts(barId, pieId) {
+      // Bar Chart with updated colors
+      new Chart(document.getElementById(barId), {
+        type: 'bar',
+        data: {
+          labels: ['Correct', 'Incorrect'],
+          datasets: [{
+            label: 'Quiz Results',
+            data: [7, 3],
+            backgroundColor: ['#1E90FF', '#FF6347']  // Blue and Orange
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } }
+        }
+      });
+  
+      // Pie Chart with updated colors
+      new Chart(document.getElementById(pieId), {
+        type: 'pie',
+        data: {
+          labels: ['Correct', 'Incorrect'],
+          datasets: [{
+            data: [7, 3],
+            backgroundColor: ['#00CED1', '#FF1493']  // Cyan and Magenta
+          }]
+        },
+        options: {
+          responsive: true
+        }
+      });
+    }
+  
+    // Create charts
+    createCharts('barChart1', 'pieChart1');
+  </script>
+  
+</body>
+</html>
