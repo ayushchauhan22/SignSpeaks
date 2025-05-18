@@ -13,7 +13,7 @@ A real-time sign language recognition system that converts sign language gesture
 ## Technologies Used
 
 - Python
-- Flask (Web Framework)
+- Flask (Web Framework & Backend)
 - OpenCV (Computer Vision)
 - MediaPipe (Hand Tracking)
 - Scikit-learn (Machine Learning)
