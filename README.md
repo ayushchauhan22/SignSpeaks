@@ -12,7 +12,7 @@ A real-time sign language recognition system that converts sign language gesture
 
 ## Technologies Used
 
-- Python
+- Python (Primary Programming Language)
 - Flask (Web Framework & Backend)
 - OpenCV (Computer Vision)
 - MediaPipe (Hand Tracking)
@@ -37,15 +37,15 @@ pip install -r libraries.txt
 python web_app.py
 ```
 
-4. Open your browser and navigate to `http://localhost:5001`
+4. Open your browser and navigate to `http://localhost:5001` (the server is set to run on port `5001` by default)
 
-## Project Structure
+## Project File Structure
 
-- `web_app.py`: Main Flask application
+- `web_app.py`: Main Flask application to run thr server
 - `sign_language.py`: Sign language recognition logic
 - `templates/`: HTML templates
-- `assets/`: Static files (CSS, JS, images)
-- `models/`: Trained model files
+- `assets/`: Static files (Images and icons)
+- `models/`: Prediction model files
 - `training_data/`: Training data for the model
 
 ## Requirements
@@ -56,6 +56,6 @@ See `libraries.txt` for the complete list of dependencies.
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Author
+## Authors
 
-Ayush Chauhan 
+Ayush Chauhan, Ayush Gupta, Ansh Sharma, Brahmjot Singh
