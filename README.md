@@ -37,8 +37,7 @@ pip install -r libraries.txt
 python web_app.py
 ```
 
-4. Open your browser and navigate to `http://localhost:5001`
-   (the server is set to run on port `5001` by default)
+4. Open your browser and navigate to `http://localhost:5001` (the server is set to run on port `5001` by default)
 
 ## Project File Structure
 
